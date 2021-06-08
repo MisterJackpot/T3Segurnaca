@@ -22,4 +22,4 @@ decimal_A = pow(decimal_g, decimal_a, decimal_p)
 print("Valor decimal A: " + str(decimal_A))
 hex_A = hex(decimal_A)
 
-print("Valor hexadecimal A: " + str(hex_A))
+print("Valor hexadecimal A: " + hex_A)
