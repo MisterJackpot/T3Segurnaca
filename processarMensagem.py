@@ -1,8 +1,8 @@
 from Crypto.Cipher import AES
 from os import urandom
 
-# Variaveis Alteraveis: S = Hex da senha; encrypted_message_hex = Mensagem encriptada em hexadecimal
-encrypted_message_hex = "bf24ed9438a553f2bae45b13a869f6bb9ffa59436b580b0d2dbd09778da5d893aec0583b3beb0bcd0aab6dafae9664e90fb7cba5dfa24984eb018a135771e5ee1d87b64c742ab36cd06e50e8f49aa6a1"
+# Variaveis Alteraveis: S = Hex da senha; encrypted_message_hex = Mensagem cifrada em hexadecimal
+encrypted_message_hex = "FC6A9AA1BF05F7F7060599BA9992DF9D4B59D43B438CB5D5BF1DF881CFCF44A5FF0C48ABFB9926FC76406858E9190877C8AB65F208C6EE1CC40F5BFC636FBFB5EDA88C8E6DE23A6A94676D12864F77B9"
 S = "a3c7d46aab83962cb7eebfa87b4d33bc"
 
 # Adiciona padding a mensagem caso esta não esteja com tamanho de 16 bytes
@@ -12,9 +12,9 @@ def pad(text):
     return text
 
 # Transforma a mensagem de hexadecimal para uma lista de bytes e separa a mensagem e o IV
-message_bytes_array = bytes.fromhex(encrypted_message_hex)
-IV = message_bytes_array[:16]
-encrypted_message = message_bytes_array[16:]
+message_bytes = bytes.fromhex(encrypted_message_hex)
+IV = message_bytes[:16]
+encrypted_message = message_bytes[16:]
 
 # Pega os bytes da chave
 S = bytes.fromhex(S)
@@ -35,4 +35,3 @@ IV = urandom(16)
 cipher = AES.new(S, AES.MODE_CBC, IV)
 cipher_text = cipher.encrypt(reversed_clear_text)
 print(IV.hex() + cipher_text.hex())
-
