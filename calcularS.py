@@ -1,6 +1,19 @@
 import hashlib
 import math
 
+# Exemplo de execução e parametros do trabalho para calculo da senha
+# Executar o programa informando os valores de a e p utilizados no "gerarA.py"
+# Informar o valor de B recebido em hexadecimal
+# Valor de a gerado para mensagem do professor: 1437164750761605896701117613557156711703278328311910170042266207183552797139995898043534547594174289402292831101412633084981942889105557808587999290485070339209987904875898562467552403708869055525271608388217500018083529186752709686449691968589037246150975888355122424681103568576623713654541411202331
+# Valor de p utilizado: B10B8F96A080E01DDE92DE5EAE5D54EC52C99FBCFB06A3C69A6A9DCA52D23B616073E28675A23D189838EF1E2EE652C013ECB4AEA906112324975C3CD49B83BFACCBDD7D90C4BD7098488E9C219A73724EFFD6FAE5644738FAA31A4FF55BCCC0A151AF5F0DC8B4BD45BF37DF365C1A65E68CFDA76D4DA708DF1FB2BC2E4A4371
+# Valor de B utilizado: 1EE599AE47AD15E4CB59F0A5B6F84108D51584D01A8B58FD302FCC472E8F89DC63833AA2F0409089A740A31A81BB695D03663696E3A6998F8E1BC19E0EB92849C2347602DF2353D79C20B3C374F9AE60E3FEBD4A01326342F882A332287FFD05741F80F338A8C79CBC5F4F3BA9426FAA2EE8CF5325D497E1BDC17AD27F2F73A2
+# Valor para senha obtido: a3c7d46aab83962cb7eebfa87b4d33bc
+# Obs: Para realizar o hash e obter a senha correta tive que converter o valor de V para bytes
+# utilizando o tamanho do numero em bytes + 1 bit para este ser o bit de sinal do numero (complemento de dois)
+# caso contrario a senha não seria igual a do professor pois algumas liguagens convertem os numeros
+# para bytes se utilizando do complemento de dois como padrão e o python não
+
+
 # Valores a e p em formato decimal
 decimal_a = 1437164750761605896701117613557156711703278328311910170042266207183552797139995898043534547594174289402292831101412633084981942889105557808587999290485070339209987904875898562467552403708869055525271608388217500018083529186752709686449691968589037246150975888355122424681103568576623713654541411202331
 decimal_p = 124325339146889384540494091085456630009856882741872806181731279018491820800119460022367403769795008250021191767583423221479185609066059226301250167164084041279837566626881119772675984258163062926954046545485368458404445166682380071370274810671501916789361956272226105723317679562001235501455748016154805420913
@@ -12,10 +25,10 @@ decimal_B = int(hex_B, 16)
 # Calculo de V: (B^a) mod p
 decimal_V = pow(decimal_B, decimal_a, decimal_p)
 
-# Criação do Hash com SHA256 utilizando os bytes de V ordenados por big-endian e incluindo um byte para assinatura
+# Criação do Hash com SHA256 utilizando os bytes de V ordenados por big-endian e incluindo um byte para sinal
 m = hashlib.sha256()
-m.update(decimal_V.to_bytes(length=math.ceil((decimal_V.bit_length() + 1) / 8), byteorder='big', signed=True))
+m.update(decimal_V.to_bytes(length=math.ceil((decimal_V.bit_length()+1) / 8), byteorder='big', signed=True))
 
 # Separação dos 16 primeiros bytes do hash para obtenção da Senha
-S = m.digest()[:16]
-print("Senha:  " + S.hex())
+password = m.digest()[:16]
+print("Senha:  " + password.hex())
