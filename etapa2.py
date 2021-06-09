@@ -1,25 +1,24 @@
 from Crypto.Cipher import AES
 import sys
 
+encrypted_message_hex = "FC6A9AA1BF05F7F7060599BA9992DF9D4B59D43B438CB5D5BF1DF881CFCF44A5FF0C48ABFB9926FC76406858E9190877C8AB65F208C6EE1CC40F5BFC636FBFB5EDA88C8E6DE23A6A94676D12864F77B9"
+S = "bb440ed54eabf01381039c0f6a7b54b07a7209290bc703bbfa45b9778c07b052"
 
-if __name__ == '__main__':
-    encrypted_message_hex = sys.argv[1]
-    S = sys.argv[2]
+message_bytes_array = bytes.fromhex(encrypted_message_hex)
+IV = message_bytes_array[:16]
+encrypted_message = message_bytes_array[16:]
+senha = bytes.fromhex(S)[:16]
 
-    message_bytes_array = bytes.fromhex(encrypted_message_hex)
-    IV = message_bytes_array[:32]
-    encrypted_message = message_bytes_array[32:]
+aes1 = AES.new(senha, AES.MODE_CBC, IV)
+clear_text = aes1.decrypt(encrypted_message).decode('utf-8')
+print("Mensagem clara: " + str(clear_text))
 
-    aes1 = AES.new(S, AES.MODE_CBC, IV)
-    clear_text = aes1.decrypt(encrypted_message).decode('utf-8')
-    print(clear_text)
+reversed_clear_text = clear_text[::-1]
 
-    reversed_clear_text = clear_text[::-1]
+aes2 = AES.new(S, AES.MODE_CBC, IV)
+cipher_text = aes2.encrypt(reversed_clear_text)
 
-    aes2 = AES.new(S, AES.MODE_CBC, IV)
-    cipher_text = aes2.encrypt(reversed_clear_text)
-
-    print(IV.hex() + cipher_text.hex())
+print(IV.hex() + cipher_text.hex())
 
 
 
